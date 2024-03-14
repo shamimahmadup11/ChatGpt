@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>chatGpt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main>
+    <div class="masg-container">
+      <div class="user-msg">USER: HELLO</div>
+      <div class="bot-msg">BOT: HOW CAN I HELP YOU </div>
+
+    </div>
+    <div class="input-container">
+      <input type="text" placeholder="chat with Gpt " class="user-input">
+      <button class="btn">Search</button>
+    </div>
+  </main>
+
+
+
+  <!-- Your HTML content -->
+
+  <!-- Import Map for the Generative AI library -->
+  <script type="importmap">
+          {
+            "imports": {
+              "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+          }
+        </script>
+
+  <!-- Script to initialize and use Generative AI -->
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+    const API_KEY = 'AIzaSyCpeSXTJX-4D4pvwO5PAAszstK56_dI2gE'
+    // Access your API key (see "Set up your API key" above)
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    document.querySelector('.btn').addEventListener("click", run);
+    async function run() {
+      // alert('api')
+      // For text-only input, use the gemini-pro model
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      let userInput = document.querySelector('.user-input').value;
+      // console.log(userInput.value);
+      let userMassageDisplaydiv = document.createElement('div');
+      userMassageDisplaydiv.className = 'user-msg';
+      userMassageDisplaydiv.textContent = `USER:${userInput}`;
+      document.querySelector('.masg-container').appendChild(userMassageDisplaydiv);
+      const prompt = userInput;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      // console.log(text);
+      let botmsgDiv = document.createElement('div');
+      botmsgDiv.className= 'bot-msg';
+      botmsgDiv.textContent = `BOT:-${text}`;
+      document.querySelector('.masg-container').appendChild(botmsgDiv);
+    }
+
+    // run();
+  </script>
+
+</body>
+
+</html>
